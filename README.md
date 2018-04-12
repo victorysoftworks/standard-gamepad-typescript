@@ -1,6 +1,6 @@
 # Standard Gamepad
 
-`Version 1.1`
+Version: `1.1.1`
 
 A TypeScript library providing a simple interface for using standard USB gamepads (Xbox One/PS4) in HTML5 game projects.
 
@@ -65,7 +65,7 @@ The `getPressedButtons` method returns an Array of `StandardGamepadButton` enume
 - `StandardGamepadButton.Start`
 - `StandardGamepadButton.Home`
 
-If no buttons are being pressed on the gamepad, or if there is no gamepad connected, this method returns an empty Array.
+If no buttons are being pressed on the gamepad, or if there is no gamepad connected, this method returns an empty Array (`[]`).
 
 #### Vanilla JavaScript
 
@@ -97,6 +97,8 @@ The object returned from `getJoystickPositions` has the following structure:
 ```
 
 The degree of joystick movement is represented by a floating-point value between -1.0 (left/up) and 1.0 (right/down).
+
+If neither joystick is being moved, the values will all be 0. If there is no gamepad connected, this method returns an empty object (`{}`).
 
 ### Check Gamepad State within Callbacks
 
