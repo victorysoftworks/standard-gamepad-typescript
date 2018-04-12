@@ -1,5 +1,6 @@
 // For more on the Gamepad API, see https://w3c.github.io/gamepad/.
 
+/// <reference path="StandardGamepadButton.ts" />
 /// <reference path="StandardGamepadEventHandler.ts" />
 /// <reference path="StandardGamepadMapping.ts" />
 
@@ -299,6 +300,97 @@ namespace VictorySoftworks.IO.Gamepad.StandardGamepad {
 
     private registerButtonPressHandler(trigger: StandardGamepadEvent, callback: (degree?: number) => void): void {
       this.buttonPressHandlers.push([trigger, callback]);
+    }
+
+    public getPressedButtons(): Array<StandardGamepadButton> {
+      this.getConnectedGamepad();
+
+      let pressedButtons = new Array<StandardGamepadButton>();
+
+      if (this.mapping.leftJoystickIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.LeftJoystick);
+      }
+
+      if (this.mapping.rightJoystickIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.RightJoystick);
+      }
+
+      if (this.mapping.upButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.Up);
+      }
+
+      if (this.mapping.downButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.Down);
+      }
+
+      if (this.mapping.leftButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.Left);
+      }
+
+      if (this.mapping.rightButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.Right);
+      }
+
+      if (this.mapping.AButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.A);
+      }
+
+      if (this.mapping.BButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.B);
+      }
+
+      if (this.mapping.XButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.X);
+      }
+
+      if (this.mapping.YButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.Y);
+      }
+
+      if (this.mapping.leftBumperIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.LeftBumper);
+      }
+
+      if (this.mapping.leftTriggerIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.LeftTrigger);
+      }
+
+      if (this.mapping.rightBumperIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.RightBumper);
+      }
+
+      if (this.mapping.rightTriggerIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.RightTrigger);
+      }
+
+      if (this.mapping.startButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.Start);
+      }
+
+      if (this.mapping.selectButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.Select);
+      }
+
+      if (this.mapping.homeButtonIsPressed(this.gamepad)) {
+        pressedButtons.push(StandardGamepadButton.Home);
+      }
+
+      return pressedButtons;
+    }
+
+    public getJoystickPositions(): object {
+      this.getConnectedGamepad();
+
+      return {
+        'left': {
+          'horizontal': this.mapping.getLeftJoystickHorizontalMovementDegree(this.gamepad),
+          'vertical': this.mapping.getLeftJoystickVerticalMovementDegree(this.gamepad)
+        },
+        'right': {
+          'horizontal': this.mapping.getRightJoystickHorizontalMovementDegree(this.gamepad),
+          'vertical': this.mapping.getRightJoystickVerticalMovementDegree(this.gamepad)
+        }
+      };
     }
   }
 }

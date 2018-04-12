@@ -1,10 +1,12 @@
 # Standard Gamepad
 
-A TypeScript library providing a simple event handler interface for using standard USB gamepads (Xbox One/PS4) in HTML5 game projects.
+`Version 1.1`
+
+A TypeScript library providing a simple interface for using standard USB gamepads (Xbox One/PS4) in HTML5 game projects.
 
 For more on the :video_game: Gamepad API, see https://w3c.github.io/gamepad/ and https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API.
 
-## Quick Start
+## Event Handler Interface
 
 The Standard Gamepad library allows you to bind callback functions to gamepad events, such as `onConnected` or `onStartButtonPressed`.
 
@@ -33,6 +35,73 @@ gamepad.onLeftJoystickMovedRight((degree: number) => {
 gamepad.enable();
 ```
 
+## Manually Reading Pressed Buttons and Joystick Positions
+
+### Pressed Buttons
+
+If you need to read the list of pressed gamepad buttons manually, you can do so with the `getPressedButtons` method.
+
+```javascript
+let pressedButtons = gamepad.getPressedButtons();
+```
+
+The `getPressedButtons` method returns an Array of `StandardGamepadButton` enumerated values representing each button that is currently pressed:
+
+- `StandardGamepadButton.Up`
+- `StandardGamepadButton.Down`
+- `StandardGamepadButton.Left`
+- `StandardGamepadButton.Right`
+- `StandardGamepadButton.A`
+- `StandardGamepadButton.B`
+- `StandardGamepadButton.X`
+- `StandardGamepadButton.Y`
+- `StandardGamepadButton.LeftJoystick`
+- `StandardGamepadButton.LeftTrigger`
+- `StandardGamepadButton.LeftBumper`
+- `StandardGamepadButton.RightJoystick`
+- `StandardGamepadButton.RightTrigger`
+- `StandardGamepadButton.RightBumper`
+- `StandardGamepadButton.Select`
+- `StandardGamepadButton.Start`
+- `StandardGamepadButton.Home`
+
+If no buttons are being pressed on the gamepad, or if there is no gamepad connected, this method returns an empty Array.
+
+#### Vanilla JavaScript
+
+If you are using the compiled Standard Gamepad library in a vanilla JavaScript project, the enumerated values are cast to plain strings, such as `"Up"`, `"A"`, or `"Start"`.
+
+### Joystick Positions
+
+You can read the current joystick positions with the `getJoystickPositions` method.
+
+```javascript
+let joystickPositions = gamepad.getJoystickPositions();
+```
+
+The `getJoystickPositions` method returns a plain object representing the degree to which the left and right joysticks are moved.
+
+The object returned from `getJoystickPositions` has the following structure:
+
+```javascript
+{
+  'left': {
+    'horizontal': number,
+    'vertical': number
+  },
+  'right': {
+    'horizontal': number,
+    'vertical': number
+  }
+}
+```
+
+The degree of joystick movement is represented by a floating-point value between -1.0 (left/up) and 1.0 (right/down).
+
+### Check Gamepad State within Callbacks
+
+You are encouraged to place your manual checking for button presses and joystick positions inside an `onConnected` callback, preferably within a `setInterval` or `requestAnimationFrame` function that can be cancelled if the `onDisconnected` callback fires.
+
 ## Method Reference
 
 | Method                    | Parameters                           | Description                                                                                                                                                                                                                        |
@@ -40,6 +109,8 @@ gamepad.enable();
 | enable                    | None                                 | Enables a connected gamepad. If no gamepad is connected, the browser will wait for one to be connected before firing an `onConnected` event.                                                                                       |
 | disable                   | None                                 | Disables a gamepad. The browser will stop listening for gamepad connections and button press events until `enable` is called.                                                                                                      |
 | reset                     | None                                 | Disables a gamepad and clears all registered callbacks.                                                                                                                                                                            |
+| getPressedButtons         | None                                 | Returns an array of `StandardGamepadButton` enumerated values representing which buttons are being pressed this frame (see above).                                                                                                 |
+| getJoystickPositions      | None                                 | Returns a plain object representing the degree to which the left and right joystick are moved horizontally or vertically (see above).                                                                                              |
 | onConnected               | `callback: () => void`               | Binds a callback function to execute when a gamepad is connected.                                                                                                                                                                  |
 | onDisconnected            | `callback: () => void`               | Binds a callback function to execute when a gamepad is disconnected.                                                                                                                                                               |
 | onLeftJoystickMovedUp     | `callback: (degree: number) => void` | Binds a callback function to execute when the left joystick is moved up. The browser will pass the degree to which the joystick is moved to the callback function, represented by a floating-point value between -0.1 and -1.0.    |
